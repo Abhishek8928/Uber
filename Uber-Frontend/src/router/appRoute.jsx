@@ -1,8 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../Pages/Home";
-import AppLayout from "../AppLayout";
 import Login from "../Pages/Login";
-import Signup from "../Pages/Signup";
+import Index from "../Pages/Index";
+import CaptainSignup from "../Pages/CaptainSignup";
+import UserSignup from "../Pages/UserSignup";
 
 
 
@@ -11,7 +12,7 @@ import Signup from "../Pages/Signup";
 const APP_ROUTING_CONFIG = [
     {
         path:'/',
-        element:<AppLayout />,
+        element:<Index />,
     },
     {
         path:'/home',
@@ -22,8 +23,12 @@ const APP_ROUTING_CONFIG = [
         element:<Login/>
     },
     {
-        path:'/Signup',
-        element:<Signup/>
+        path:'/user/register',
+        element:<UserSignup/>
+    }
+    ,{
+        path:'/captain/register',
+        element:<CaptainSignup />
     }
 ]
 

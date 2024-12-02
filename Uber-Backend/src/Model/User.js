@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema(
     },
     emailId: {
       type: String,
+      unique: true,
       required: true,
       trim: true,
       lowercase: true,
@@ -39,6 +40,10 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
+    role:{
+      type:Number,
+      default:0
+    },
     password: {
       type: String,
       required: true,
@@ -47,6 +52,7 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 
 userSchema.methods.generateToken = function () {
   const userId = this._id;

@@ -1,24 +1,38 @@
-
-import Home from "./Pages/Home";
-
+import { RouterProvider } from "react-router-dom";
+import appRoute from "./router/appRoute.jsX";
+import { useDispatch } from "react-redux";
+import { addUser } from "./redux/slice/user.slice";
+import { useEffect } from "react";
+import axiosInstances from "./config/axiosInstances";
 function AppLayout() {
-  return (
-    <div className=" w-full h-screen ">
-      <img
-        className="w-full h-screen  object-cover"
-        src="https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/c5310f182519763.652f3606b64b0.jpg"
-        alt=""
-      />
+  const token = localStorage.getItem("token");
 
-      <div className="bg-white p-8  w-full fixed bottom-0 ">
-        <h2 className="font-semibold text-2xl">Getting Started With Uber</h2>
+  const dispatchHandler = useDispatch();
 
-        <button className="w-full bg-black text-white font-semibold rounded py-2 mt-8">
-          Continue
-        </button>
-      </div>
-    </div>
-  );
+  async function getProfileInfo() {
+    try {
+      const res = await axiosInstances.get("/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const {data} = res?.data;
+
+      dispatchHandler(addUser(data));
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      getProfileInfo();
+    }
+  }, [token]);
+
+  return <RouterProvider router={appRoute} />;
 }
 
 export default AppLayout;

@@ -1,6 +1,6 @@
-const { isEmail, isStrongPassword, isEmpty } = require("validator");
+const { isEmail, isStrongPassword, isEmpty  , isNumeric , isAlphanumeric} = require("validator");
 
-function validateLogInField(req) {
+function validateSignUpField(req) {
   const INPUT_BY_USER = req.body;
   
 
@@ -25,7 +25,7 @@ function validateLogInField(req) {
 }
 
 
-function validateSignInField(req) {
+function validateLogInField(req) {
   const INPUT_BY_USER = req.body;
 
   // Check if any required fields are empty
@@ -52,7 +52,41 @@ function validateSignInField(req) {
 }
 
 
+function validateCaptainVechileInfo(vehicleInfo) {
+  const { color, number, type, capacity } = vehicleInfo;
+
+  // Check that no field is empty
+  let getObjectKey = Object.keys(vehicleInfo);
+  const isValidInput = getObjectKey.every(item => !isEmpty(vehicleInfo[item]));
+
+  if (isValidInput) {
+
+    if (typeof color !== 'string' || color.trim() === '') {
+      return { isValid: false, message: "Color must be a valid string." };
+    }
+
+    if (!isAlphanumeric(number.replace(/[^a-zA-Z0-9]/g, ''), 'en-US', { ignore: ' ' })) {
+      return { isValid: false, message: "Invalid number plate format." };
+    }
+
+    const validTypes = ["bike", "car","auto"];
+    if (!validTypes.includes(type)) {
+      return { isValid: false, message: "Type must be either 'bike' or 'car' or 'auto." };
+    }
+
+    if (!isNumeric(capacity.toString()) || Number(capacity) <= 0) {
+      return { isValid: false, message: "Capacity must be a valid positive number." };
+    }
+
+    return { isValid: true, message: "All fields are valid." };
+  }
+
+  return { isValid: false, message: "All fields must be filled." };
+}
+
+
 module.exports = {
     validateLogInField,
-    validateSignInField
+    validateSignUpField,
+    validateCaptainVechileInfo
 }
